@@ -1,0 +1,104 @@
+
+query listAll($id:ID!) {
+  allEmployees{
+    edges{
+      node{
+        id
+        name
+      }
+    }
+  }
+  allDepartments{
+    edges{
+      node{
+        id
+        name
+      }
+    }
+  }
+  node(id:$id){
+    id
+    __typename
+    ... on Employee{
+      name
+      hiredOn
+    }
+    ... on Department{
+      name
+    }
+  }
+}
+
+mutation addDepartment($name:String!){
+  createDepartment(name:$name){
+    name
+  }
+}
+
+query listEmployees{
+  allEmployees {
+    edges{
+      node{
+        ...employeeInfo
+      }
+    }
+  }
+}
+query listDepartments{
+  allDepartments{
+    edges{
+      node{
+        id
+        name
+      }
+    }
+  }
+}
+
+query listAll{
+ allDepartments{
+    edges{
+      node{
+        id
+        name
+      }
+    }
+  }
+  allEmployees {
+    edges{
+      node{
+        ...employeeInfo
+      }
+    }
+  }
+}
+fragment test on Node {
+      id
+    __typename
+    ... on Employee{
+      name
+      hiredOn
+    }
+    ...on Department{
+      name
+    }
+}
+fragment employeeInfo on Employee {
+  identificationNumber: id
+  name
+}
+
+query findNode($idPerson:ID!, $idDepartment:ID!){
+  person:node(id: $idPerson){
+    ...test
+  }
+  department:node(id: $idDepartment){
+    ...test
+  }
+}
+
+mutation addDepartment($name: String!) {
+  createDepartment(name: $name){
+    name
+  }
+}
